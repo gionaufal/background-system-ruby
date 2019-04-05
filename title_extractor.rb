@@ -1,8 +1,11 @@
 require 'open-uri'
 require 'nokogiri'
+require './workers/magique_worker'
 
-class TitleExtractorService
-  def call(url)
+class TitleExtractorWorker
+  include Magique::Worker
+
+  def perform(url)
     document = Nokogiri::HTML(open(url))
     title = document.css('html > head > title').first.content
     puts title.gsub(/[[:space:]]+/, ' ').strip
