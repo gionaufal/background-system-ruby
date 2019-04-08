@@ -1,6 +1,8 @@
 require 'open-uri'
 require 'nokogiri'
-require './workers/magique_worker'
+require './magique'
+require './magique/worker'
+require './magique/processor'
 
 RUBYMAGIC = %w(
 https://www.locaweb.com.br
@@ -18,7 +20,7 @@ class TitleExtractorWorker
   def perform(url)
     document = Nokogiri::HTML(open(url))
     title = document.css('html > head > title').first.content
-    puts title.gsub(/[[:space:]]+/, ' ').strip
+    puts "[#{Thread.current.name}] #{title.gsub(/[[:space:]]+/, ' ').strip}"
   rescue
     puts "Unable to find a title for #{url}"
   end

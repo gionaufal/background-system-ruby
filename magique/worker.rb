@@ -10,7 +10,7 @@ module Magique
       end
 
       def perform_async(*args)
-        Thread.new { new.perform(*args) }
+        Magique.backend.push(worker: self, args: args)
       end
     end
 
